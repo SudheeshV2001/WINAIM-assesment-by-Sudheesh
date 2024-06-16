@@ -1,0 +1,29 @@
+1)##Write a query to find all employees who have been hired in the last year.
+
+
+SELECT customer_id, COUNT(order_id) AS total_orders
+FROM orders
+GROUP BY customer_id;
+
+
+2)##Write a query to calculate the total salary expenditure for each department.
+
+
+SELECT product_id, product_name
+FROM products
+WHERE product_id NOT IN (SELECT DISTINCT product_id FROM order_items);
+
+
+
+3)Write a query to find the top 5 highest-paid employees along with their
+department names.
+
+
+SELECT c.customer_id, c.first_name, c.last_name, SUM(oi.quantity * oi.price) AS total_spent
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+JOIN order_items oi ON o.order_id = oi.order_id
+WHERE o.order_date >= DATEADD(month, -1, GETDATE())
+GROUP BY c.customer_id, c.first_name, c.last_name
+ORDER BY total_spent DESC
+LIMIT 1;
